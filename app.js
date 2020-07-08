@@ -16,44 +16,49 @@ const articleSchema = mongoose.Schema({
 })
 const Article = mongoose.model("Article",articleSchema)
 
-//BUILDING OUR RESTful API
-//HTTP ACTION: GET
-app.get("/articles",function(req, res){
-  Article.find(function(e,foundArticles){
-    if(!e){
-      console.log(foundArticles);
-      res.send(foundArticles)
-    }
-    else{res.send(e)}
-  })
-})
+app.route("/articles")
+    .get(function(req, res){
+      Article.find(function(e,foundArticles){
+        if(!e){
+          console.log(foundArticles);
+          res.send(foundArticles)
+        }
+        else{res.send(e)}
+      })
+    })
+    .post(function(req,res){
+      const article = new Article({
+        title : req.body.title,
+        content : req.body.content
+      })
+      //Once it is stored in the database we call the function and send and OK or not OK saved in the db
+      article.save(function(e){
+        if(!e){
+          res.send("Successfully added!")
+        }else{
+          res.send("UPS! Somethin went wrong")
+        }
+      });
+      console.log(req.body.title);
+      console.log(req.body.content);
+    })
+    .delete(function(req,res){
+      Article.deleteMany(function(e){
+        if(!e){
+          res.send("Successfully articles deleted")
+        }else{res.send(e)}
+      })
+    })
 
-//HTTP ACTION: POST
-app.post("/articles",function(req,res){
-  const article = new Article({
-    title : req.body.title,
-    content : req.body.content
-  })
-  //Once it is stored in the database we call the function and send and OK or not OK saved in the db
-  article.save(function(e){
-    if(!e){
-      res.send("Successfully added!")
-    }else{
-      res.send("UPS! Somethin went wrong")
-    }
-  });
-  console.log(req.body.title);
-  console.log(req.body.content);
-})
+/*BUILDING OUR RESTful API
+HTTP ACTION: GET
+app.get("/articles",)
+
+HTTP ACTION: POST
+app.post("/articles",)
 
 //HTTP REQUEST: DELETE
-app.delete("/articles",function(req,res){
-  Article.deleteMany(function(e){
-    if(!e){
-      res.send("Successfully articles deleted")
-    }else{res.send(e)}
-  })
-})
+app.delete("/articles",)*/
 
 app.listen(8080,function(){
   console.log("Page running of port 8080");
