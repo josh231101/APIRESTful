@@ -8,7 +8,7 @@
 ## Setup/Installation :computer:
 **Requirements:**
 - Node<br>
-- MongoDB and an account for your mongoDB Atlas
+- MongoDB
 
 To make sure you have installed node write in your terminal <br>
 
